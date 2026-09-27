@@ -24,3 +24,6 @@ jobs:
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/dockerized-application:latest
+
+      - name: Verify Docker image
+        run: docker images
