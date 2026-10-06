@@ -1,7 +1,12 @@
 from fastapi import FastAPI
 import redis
+from pydantic import BaseModel
 
 app = FastAPI()
+
+class User(BaseModel):
+    name: str
+    email: str
 
 r = redis.Redis(host="redis", port=6379, decode_responses=True)
 #e3ml redis client w 5azno fi variable r 
@@ -19,3 +24,23 @@ def home():
 def cache_data():
     r.set("message", "Hello from Redis")
     return {"message": r.get("message")}
+
+@app.post("/users")
+def create_user(user: User):
+    r.set(f"user:{user.email}", user.model_dump_json())
+
+    return {
+        "message": "User created successfully",
+        "user": user
+    }
+
+@app.get("/users/{email}")
+def get_user(email: str):
+    data = r.get(f"user:{email}")
+
+    if data is None:
+        return {"message": "User not found"}
+
+    return {
+        "user": data
+    }
