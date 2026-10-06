@@ -1,15 +1,26 @@
 services:
+# asdo el 3 services bto3y(nginx,fastapi,redis)
   app:
+#Docker, ro7 3ala folder esmo app, w ebnely el Docker image beta3et 
+#el application men el Dockerfile elly mawgood henak
     build: ./app
+#lma a2ol build :./app yst5dm docker ./app/dockerfile w ybny el image mno
     
   nginx:
+#di hatkon el entrypoint bta3t el application y3ny user msh hayro7 3la tol ll fastapi
     image: nginx:alpine
+#hena bns7b image gahza mn docker regisrty esmha nginx:alpine
     ports:
       - "80:80"
+#el host eli hwa my laptop (port 80)>docker hay3ml port mapping>nginx container (port 80)
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+#5od nginx conf eli 3la laptop w 7oto fi nginx container fi el path dh w yb2a read only 
+#y3ny nginx y2dr y2ra bs lkn mi3mlsh ai t3dil fi el cong el asly
     depends_on:
+#3ndna tartib ll dependcy fi start up abd2 b app then ngin
       - app
 
   redis:
     image: redis:alpine
+#di service talta esmha redis w di el image eli hangbha mn docker registry 
