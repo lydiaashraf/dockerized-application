@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import redis
 from pydantic import BaseModel
+import json
 
 app = FastAPI()
 
@@ -42,5 +43,5 @@ def get_user(email: str):
         return {"message": "User not found"}
 
     return {
-        "user": data
+        "user": json.loads(data)
     }
