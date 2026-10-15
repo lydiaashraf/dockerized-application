@@ -1,0 +1,40 @@
+# Esm el workflow elly hayezhar fel GitHub Actions
+name: Project 2 CI
+
+# Emta el workflow yeshta8al
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# El jobs elly GitHub hayenafezha
+jobs:
+  test:
+    # El operating system elly hayeshaghal 3aleh el job
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Yegib el repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Yegahhez Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # Step 3: Yethabet en pip version mo7addatha
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      # Step 4: Yethabet el project dependencies
+      - name: Install dependencies
+        run: python -m pip install -r app/requirements.txt
+
+      # Step 5: Yeshaghal el automated tests
+      - name: Run tests
+        run: python -m pytest tests/ -v
