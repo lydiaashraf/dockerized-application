@@ -38,3 +38,7 @@ jobs:
       # Step 5: Yeshaghal el automated tests
       - name: Run tests
         run: python -m pytest tests/ -v
+
+      # Step 6: Yebni Docker image ba3d ma el tests tenga7
+      - name: Build Docker image
+        run: docker build -t dockerized-application:latest ./app
