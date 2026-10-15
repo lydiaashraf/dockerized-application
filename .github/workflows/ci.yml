@@ -1,6 +1,11 @@
 # Esm el workflow elly hayezhar fel GitHub Actions
 name: Project 2 CI
 
+# El permissions elly el workflow me7tagha
+permissions:
+  contents: read
+  packages: write
+
 # Emta el workflow yeshta8al
 on:
   push:
@@ -42,3 +47,22 @@ jobs:
       # Step 6: Yebni Docker image ba3d ma el tests tenga7
       - name: Build Docker image
         run: docker build -t dockerized-application:latest ./app
+
+      # Step 7: Y7awel esm el image le lowercase
+      - name: Set image name
+        run: echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+
+      # Step 8: Y3mel login 3ala GitHub Container Registry
+      - name: Log in to GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      # Step 9: Y3mel tag lel image 3ashan teb2a bel esm el sa7
+      - name: Tag Docker image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: docker tag dockerized-application:latest "$IMAGE_NAME:latest"
+
+      # Step 10: Yerfa3 el image 3ala GHCR
+      - name: Push Docker image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: docker push "$IMAGE_NAME:latest"
